@@ -1,22 +1,21 @@
-# Copy karein yeh modified code
 import streamlit as st
 import streamlit.components.v1 as components
 import time
 import threading
-import uuid
 import hashlib
 import os
-import subprocess
 import json
-import urllib.parse
 from pathlib import Path
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.options import Options
-import database as db
-import requests
+import sqlite3
+from datetime import datetime
 
+# ============================================
+# PAGE CONFIG
+# ============================================
 st.set_page_config(
     page_title="E2E BY SYCO AHSAN",
     page_icon="SYCO",
@@ -24,13 +23,141 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+# ============================================
+# DATABASE FUNCTIONS (Built-in)
+# ============================================
+DB_PATH = 'users.db'
+
+def get_db_connection():
+    conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE NOT NULL,
+            password_hash TEXT NOT NULL,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        )
+    ''')
+    
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS user_config (
+            user_id INTEGER PRIMARY KEY,
+            chat_id TEXT DEFAULT '',
+            name_prefix TEXT DEFAULT '',
+            delay INTEGER DEFAULT 5,
+            cookies TEXT DEFAULT '',
+            messages TEXT DEFAULT '',
+            automation_running BOOLEAN DEFAULT 0,
+            FOREIGN KEY(user_id) REFERENCES users(user_id)
+        )
+    ''')
+    
+    conn.commit()
+    conn.close()
+
+def create_user(username, password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    cursor.execute("SELECT * FROM users WHERE username = ?", (username,))
+    if cursor.fetchone():
+        conn.close()
+        return False, "Username already exists!"
+    
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    cursor.execute(
+        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+        (username, password_hash)
+    )
+    user_id = cursor.lastrowid
+    
+    cursor.execute(
+        "INSERT INTO user_config (user_id) VALUES (?)",
+        (user_id,)
+    )
+    
+    conn.commit()
+    conn.close()
+    return True, "User created successfully!"
+
+def verify_user(username, password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    password_hash = hashlib.sha256(password.encode()).hexdigest()
+    cursor.execute(
+        "SELECT user_id FROM users WHERE username = ? AND password_hash = ?",
+        (username, password_hash)
+    )
+    user = cursor.fetchone()
+    conn.close()
+    return user['user_id'] if user else None
+
+def get_username(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT username FROM users WHERE user_id = ?", (user_id,))
+    user = cursor.fetchone()
+    conn.close()
+    return user['username'] if user else None
+
+def get_user_config(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM user_config WHERE user_id = ?", (user_id,))
+    config = cursor.fetchone()
+    conn.close()
+    return dict(config) if config else None
+
+def update_user_config(user_id, chat_id, name_prefix, delay, cookies, messages):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE user_config 
+        SET chat_id = ?, name_prefix = ?, delay = ?, cookies = ?, messages = ?
+        WHERE user_id = ?
+    ''', (chat_id, name_prefix, delay, cookies, messages, user_id))
+    conn.commit()
+    conn.close()
+
+def set_automation_running(user_id, status):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE user_config SET automation_running = ? WHERE user_id = ?",
+        (1 if status else 0, user_id)
+    )
+    conn.commit()
+    conn.close()
+
+def get_automation_running(user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT automation_running FROM user_config WHERE user_id = ?",
+        (user_id,)
+    )
+    result = cursor.fetchone()
+    conn.close()
+    return bool(result['automation_running']) if result else False
+
+# Initialize database
+init_db()
+
+# ============================================
+# CSS THEME
+# ============================================
 custom_css = """
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap');
 
-    * {
-        font-family: 'Playfair Display', serif;
-    }
+    * { font-family: 'Playfair Display', serif; }
 
     .stApp {
         background-image: linear-gradient(rgba(20, 0, 40, 0.88), rgba(40, 0, 80, 0.78)),
@@ -186,21 +313,6 @@ custom_css = """
         font-weight: 500;
     }
 
-    .console-section {
-        background: rgba(20, 0, 40, 0.75);
-        border: 2px solid #b8860b;
-        border-radius: 16px;
-        padding: 22px;
-        margin-top: 28px;
-    }
-
-    .console-header {
-        color: #ffd700;
-        font-family: 'Cinzel Decorative', cursive;
-        text-shadow: 0 0 18px #ffd700bb;
-        margin-bottom: 18px;
-    }
-
     .console-output {
         background: #0f001a;
         border: 2px solid #4b0082;
@@ -221,17 +333,6 @@ custom_css = """
         color: #ffeb3b;
     }
 
-    .success-box {
-        background: linear-gradient(135deg, #b8860b, #ffd700);
-        color: #1a0033;
-        border: 2px solid #1a0033;
-    }
-
-    .error-box {
-        background: linear-gradient(135deg, #8b0000, #c71585);
-        border: 2px solid #ffd700;
-    }
-
     .footer {
         background: rgba(30, 10, 60, 0.75);
         border-top: 3px solid #b8860b;
@@ -240,13 +341,16 @@ custom_css = """
         font-size: 1.5rem;
         padding: 2.8rem;
         text-shadow: 1px 1px 5px #000;
+        text-align: center;
     }
 </style>
 """
 
 st.markdown(custom_css, unsafe_allow_html=True)
 
-# Initialize session state
+# ============================================
+# SESSION STATE
+# ============================================
 if 'logged_in' not in st.session_state:
     st.session_state.logged_in = False
 if 'user_id' not in st.session_state:
@@ -259,6 +363,8 @@ if 'logs' not in st.session_state:
     st.session_state.logs = []
 if 'message_count' not in st.session_state:
     st.session_state.message_count = 0
+if 'auto_start_checked' not in st.session_state:
+    st.session_state.auto_start_checked = False
 
 class AutomationState:
     def __init__(self):
@@ -270,11 +376,9 @@ class AutomationState:
 if 'automation_state' not in st.session_state:
     st.session_state.automation_state = AutomationState()
 
-if 'auto_start_checked' not in st.session_state:
-    st.session_state.auto_start_checked = False
-
-ADMIN_UID = "61585747097704"
-
+# ============================================
+# LOGGING FUNCTION
+# ============================================
 def log_message(msg, automation_state=None):
     timestamp = time.strftime("%H:%M:%S")
     formatted_msg = f"[{timestamp}] {msg}"
@@ -283,6 +387,9 @@ def log_message(msg, automation_state=None):
     else:
         st.session_state.logs.append(formatted_msg)
 
+# ============================================
+# SELENIUM FUNCTIONS
+# ============================================
 def find_message_input(driver, process_id, automation_state=None):
     log_message(f'{process_id}: Finding message input...', automation_state)
     time.sleep(10)
@@ -346,7 +453,6 @@ def setup_browser(automation_state=None):
     chrome_options.add_argument('--window-size=1920,1080')
     chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36')
     
-    # For Streamlit Cloud
     chromium_paths = [
         '/usr/bin/chromium-browser',
         '/usr/bin/chromium',
@@ -430,7 +536,7 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
         if not message_input:
             log_message(f'{process_id}: Message input not found!', automation_state)
             automation_state.running = False
-            db.set_automation_running(user_id, False)
+            set_automation_running(user_id, False)
             return 0
         
         delay = int(config['delay'])
@@ -510,7 +616,7 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
     except Exception as e:
         log_message(f'{process_id}: Fatal error: {str(e)}', automation_state)
         automation_state.running = False
-        db.set_automation_running(user_id, False)
+        set_automation_running(user_id, False)
         return 0
     finally:
         if driver:
@@ -520,6 +626,9 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
             except:
                 pass
 
+# ============================================
+# AUTOMATION CONTROLS
+# ============================================
 def start_automation(user_config, user_id):
     automation_state = st.session_state.automation_state
     if automation_state.running:
@@ -527,16 +636,19 @@ def start_automation(user_config, user_id):
     automation_state.running = True
     automation_state.message_count = 0
     automation_state.logs = []
-    db.set_automation_running(user_id, True)
-    username = db.get_username(user_id)
+    set_automation_running(user_id, True)
+    username = get_username(user_id)
     thread = threading.Thread(target=send_messages, args=(user_config, automation_state, user_id))
     thread.daemon = True
     thread.start()
 
 def stop_automation(user_id):
     st.session_state.automation_state.running = False
-    db.set_automation_running(user_id, False)
+    set_automation_running(user_id, False)
 
+# ============================================
+# LOGIN PAGE
+# ============================================
 def login_page():
     st.markdown("""
     <div class="main-header">
@@ -554,7 +666,7 @@ def login_page():
         password = st.text_input("Password", key="login_password", type="password")
         if st.button("Login", key="login_btn", use_container_width=True):
             if username and password:
-                user_id = db.verify_user(username, password)
+                user_id = verify_user(username, password)
                 if user_id:
                     st.session_state.logged_in = True
                     st.session_state.user_id = user_id
@@ -574,7 +686,7 @@ def login_page():
         if st.button("Create Account", key="signup_btn", use_container_width=True):
             if new_username and new_password and confirm_password:
                 if new_password == confirm_password:
-                    success, message = db.create_user(new_username, new_password)
+                    success, message = create_user(new_username, new_password)
                     if success:
                         st.success(f"{message} Please login now!")
                     else:
@@ -584,14 +696,17 @@ def login_page():
             else:
                 st.warning("Please fill all fields")
 
+# ============================================
+# MAIN APP
+# ============================================
 def main_app():
     st.markdown('<div class="main-header"><img src="https://i.ibb.co/W44ZvkQj/Picsart-26-04-29-21-54-28-037.png" class="prince-logo"><h1>SYCO AHSAN E2E OFFLINE</h1><p>səvən bıllıon smıləs ın ʈhıs world buʈ ɣours ıs mɣ fαvourıʈəs___</p></div>', unsafe_allow_html=True)
     
     if not st.session_state.auto_start_checked and st.session_state.user_id:
         st.session_state.auto_start_checked = True
-        should_auto_start = db.get_automation_running(st.session_state.user_id)
+        should_auto_start = get_automation_running(st.session_state.user_id)
         if should_auto_start and not st.session_state.automation_state.running:
-            user_config = db.get_user_config(st.session_state.user_id)
+            user_config = get_user_config(st.session_state.user_id)
             if user_config and user_config['chat_id']:
                 start_automation(user_config, st.session_state.user_id)
     
@@ -608,7 +723,7 @@ def main_app():
         st.session_state.auto_start_checked = False
         st.rerun()
     
-    user_config = db.get_user_config(st.session_state.user_id)
+    user_config = get_user_config(st.session_state.user_id)
     
     if user_config:
         tab1, tab2 = st.tabs(["Configuration", "Automation"])
@@ -623,7 +738,7 @@ def main_app():
             
             if st.button("Save Configuration", use_container_width=True):
                 final_cookies = cookies if cookies.strip() else user_config['cookies']
-                db.update_user_config(
+                update_user_config(
                     st.session_state.user_id,
                     chat_id,
                     name_prefix,
@@ -671,6 +786,9 @@ def main_app():
     else:
         st.warning("No configuration found. Please refresh!")
 
+# ============================================
+# APP ROUTING
+# ============================================
 if not st.session_state.logged_in:
     login_page()
 else:
