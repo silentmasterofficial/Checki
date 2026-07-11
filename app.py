@@ -17,8 +17,8 @@ from datetime import datetime
 # PAGE CONFIG
 # ============================================
 st.set_page_config(
-    page_title="E2E BY SYCO AHSAN",
-    page_icon="SYCO",
+    page_title="X SUNNY E2E BY SYCO AHSAN",
+    page_icon="☀️",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -151,7 +151,7 @@ def get_automation_running(user_id):
 init_db()
 
 # ============================================
-# CSS THEME
+# CSS THEME - X SUNNY STYLE
 # ============================================
 custom_css = """
 <style>
@@ -160,7 +160,7 @@ custom_css = """
     * { font-family: 'Playfair Display', serif; }
 
     .stApp {
-        background-image: linear-gradient(rgba(20, 0, 40, 0.88), rgba(40, 0, 80, 0.78)),
+        background-image: linear-gradient(rgba(255, 165, 0, 0.15), rgba(255, 140, 0, 0.25)),
                           url('https://i.ibb.co/W44ZvkQj/Picsart-26-04-29-21-54-28-037.png');
         background-size: cover;
         background-position: center;
@@ -168,56 +168,72 @@ custom_css = """
     }
 
     .main .block-container {
-        background: rgba(30, 10, 60, 0.68);
-        backdrop-filter: blur(12px);
+        background: rgba(255, 165, 0, 0.12);
+        backdrop-filter: blur(15px);
         border-radius: 22px;
         padding: 32px;
-        border: 2px solid rgba(255, 215, 0, 0.38);
-        box-shadow: 0 12px 45px rgba(255, 215, 0, 0.18),
-                    inset 0 0 28px rgba(255, 215, 0, 0.10);
+        border: 2px solid rgba(255, 165, 0, 0.5);
+        box-shadow: 0 12px 45px rgba(255, 165, 0, 0.25),
+                    inset 0 0 28px rgba(255, 165, 0, 0.10);
     }
 
     .main-header {
-        background: linear-gradient(135deg, #1a0033, #4b0082, #2a0055);
-        border: 2px solid #ffd700;
+        background: linear-gradient(135deg, #FF8C00, #FFA500, #FFD700, #FFA500, #FF8C00);
+        border: 3px solid #FFD700;
         border-radius: 25px;
         padding: 2.4rem;
         text-align: center;
         margin-bottom: 2.8rem;
-        box-shadow: 0 18px 55px rgba(0, 0, 0, 0.75),
-                    0 0 35px rgba(255, 215, 0, 0.30);
+        box-shadow: 0 18px 55px rgba(255, 165, 0, 0.6),
+                    0 0 50px rgba(255, 215, 0, 0.4);
         position: relative;
         overflow: hidden;
     }
 
     .main-header::before {
-        content: "OK";
+        content: "☀️";
         position: absolute;
-        top: -40px;
+        top: -30px;
         left: 50%;
         transform: translateX(-50%);
-        font-size: 6.5rem;
-        opacity: 0.14;
-        color: #ffd700;
+        font-size: 7rem;
+        opacity: 0.15;
+        color: #FFD700;
     }
 
     .main-header h1 {
-        background: linear-gradient(90deg, #ffd700, #ffeb3b, #ffd700);
+        background: linear-gradient(90deg, #8B0000, #FF4500, #FFD700, #FF4500, #8B0000);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-family: 'Cinzel Decorative', cursive;
-        font-size: 3.4rem;
+        font-size: 3.8rem;
         font-weight: 700;
         margin: 0;
-        text-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+        text-shadow: 0 0 35px rgba(255, 165, 0, 0.8);
+        animation: glow 2s ease-in-out infinite alternate;
+    }
+
+    @keyframes glow {
+        from { text-shadow: 0 0 20px rgba(255, 165, 0, 0.6); }
+        to { text-shadow: 0 0 40px rgba(255, 215, 0, 0.9), 0 0 60px rgba(255, 165, 0, 0.5); }
     }
 
     .main-header p {
-        color: #d4af37;
+        color: #8B0000;
         font-family: 'Great Vibes', cursive;
-        font-size: 1.8rem;
+        font-size: 2rem;
         margin-top: 0.7rem;
-        letter-spacing: 1.8px;
+        letter-spacing: 2px;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        font-weight: bold;
+    }
+
+    .sunny-text {
+        color: #FFD700;
+        text-shadow: 0 0 30px rgba(255, 165, 0, 0.8);
+        font-size: 1.5rem;
+        text-align: center;
+        font-family: 'Great Vibes', cursive;
     }
 
     .prince-logo {
@@ -225,100 +241,106 @@ custom_css = """
         height: 120px;
         border-radius: 50%;
         margin-bottom: 22px;
-        border: 4px solid #ffd700;
-        box-shadow: 0 0 35px rgba(255, 215, 0, 0.8),
-                    inset 0 0 18px rgba(255, 255, 255, 0.35);
+        border: 4px solid #FFD700;
+        box-shadow: 0 0 45px rgba(255, 215, 0, 0.9),
+                    inset 0 0 25px rgba(255, 255, 255, 0.4);
+        animation: spin 10s linear infinite;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
     }
 
     .stButton>button {
-        background: linear-gradient(45deg, #b8860b, #ffd700, #daa520);
-        color: #1a0033;
-        border: 2px solid #b8860b;
+        background: linear-gradient(45deg, #FF8C00, #FFA500, #FFD700, #FFA500);
+        color: #4A0000;
+        border: 2px solid #FFD700;
         border-radius: 16px;
         padding: 1rem 2.4rem;
         font-family: 'Cinzel Decorative', cursive;
         font-weight: 700;
         font-size: 1.2rem;
         transition: all 0.4s ease;
-        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.45);
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        box-shadow: 0 8px 30px rgba(255, 165, 0, 0.6);
+        text-shadow: 1px 1px 3px rgba(255,255,255,0.3);
         width: 100%;
     }
 
     .stButton>button:hover {
-        transform: translateY(-5px) scale(1.04);
-        box-shadow: 0 15px 40px rgba(255, 215, 0, 0.75);
-        background: linear-gradient(45deg, #ffd700, #ffeb3b, #ffd700);
+        transform: translateY(-5px) scale(1.05);
+        box-shadow: 0 15px 50px rgba(255, 165, 0, 0.9);
+        background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
     }
 
     .stTextInput>div>div>input,
     .stTextArea>div>div>textarea,
     .stNumberInput>div>div>input {
-        background: rgba(40, 20, 80, 0.75);
-        border: 2px solid #b8860b;
+        background: rgba(255, 165, 0, 0.15);
+        border: 2px solid #FF8C00;
         border-radius: 14px;
-        color: #ffd700;
+        color: #FFD700;
         padding: 1rem;
         font-size: 1.1rem;
     }
 
     .stTextInput>div>div>input::placeholder,
     .stTextArea>div>div>textarea::placeholder {
-        color: #d4af37aa;
+        color: #FFA500aa;
     }
 
     .stTextInput>div>div>input:focus,
     .stTextArea>div>div>textarea:focus {
-        border-color: #ffd700;
-        box-shadow: 0 0 0 4px rgba(255, 215, 0, 0.35);
-        background: rgba(50, 30, 90, 0.85);
+        border-color: #FFD700;
+        box-shadow: 0 0 0 4px rgba(255, 165, 0, 0.4);
+        background: rgba(255, 165, 0, 0.25);
     }
 
     label {
-        color: #ffd700 !important;
+        color: #FFD700 !important;
         font-weight: 600 !important;
         font-size: 1.15rem !important;
-        text-shadow: 1px 1px 4px #000;
+        text-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
     }
 
     .stTabs [data-baseweb="tab-list"] {
-        background: rgba(30, 10, 60, 0.65);
+        background: rgba(255, 165, 0, 0.15);
         border-radius: 16px;
         padding: 10px;
-        border: 1px solid #b8860b;
+        border: 1px solid #FF8C00;
     }
 
     .stTabs [data-baseweb="tab"] {
-        background: rgba(75, 0, 130, 0.55);
-        color: #d4af37;
+        background: rgba(255, 165, 0, 0.2);
+        color: #FFD700;
         border-radius: 12px;
         padding: 14px 26px;
         font-weight: 600;
     }
 
     .stTabs [aria-selected="true"] {
-        background: linear-gradient(45deg, #b8860b, #ffd700);
-        color: #1a0033;
+        background: linear-gradient(45deg, #FF8C00, #FFD700);
+        color: #4A0000;
     }
 
     [data-testid="stMetricValue"] {
-        color: #ffd700;
+        color: #FFD700;
         font-size: 2.6rem;
         font-weight: 700;
-        text-shadow: 0 0 18px rgba(255, 215, 0, 0.7);
+        text-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
     }
 
     [data-testid="stMetricLabel"] {
-        color: #d4af37;
+        color: #FFA500;
         font-weight: 500;
     }
 
     .console-output {
-        background: #0f001a;
-        border: 2px solid #4b0082;
+        background: rgba(50, 20, 0, 0.9);
+        border: 2px solid #FF8C00;
         border-radius: 14px;
         padding: 18px;
-        color: #ffeb3b;
+        color: #FFD700;
         font-family: 'Courier New', monospace;
         font-size: 13.5px;
         max-height: 480px;
@@ -326,22 +348,33 @@ custom_css = """
     }
 
     .console-line {
-        background: rgba(75, 0, 130, 0.25);
-        border-left: 4px solid #ffd700;
+        background: rgba(255, 165, 0, 0.1);
+        border-left: 4px solid #FFD700;
         padding: 9px 14px;
         margin: 7px 0;
-        color: #ffeb3b;
+        color: #FFD700;
     }
 
     .footer {
-        background: rgba(30, 10, 60, 0.75);
-        border-top: 3px solid #b8860b;
-        color: #d4af37;
+        background: rgba(255, 165, 0, 0.15);
+        border-top: 3px solid #FF8C00;
+        color: #FFD700;
         font-family: 'Great Vibes', cursive;
-        font-size: 1.5rem;
+        font-size: 1.8rem;
         padding: 2.8rem;
-        text-shadow: 1px 1px 5px #000;
+        text-shadow: 0 0 20px rgba(255, 165, 0, 0.5);
         text-align: center;
+    }
+    
+    .sunny-badge {
+        background: linear-gradient(45deg, #FF8C00, #FFD700);
+        color: #4A0000;
+        padding: 8px 20px;
+        border-radius: 50px;
+        display: inline-block;
+        font-weight: bold;
+        font-size: 1.2rem;
+        box-shadow: 0 0 30px rgba(255, 165, 0, 0.5);
     }
 </style>
 """
@@ -381,14 +414,14 @@ if 'automation_state' not in st.session_state:
 # ============================================
 def log_message(msg, automation_state=None):
     timestamp = time.strftime("%H:%M:%S")
-    formatted_msg = f"[{timestamp}] {msg}"
+    formatted_msg = f"[{timestamp}] ☀️ {msg}"
     if automation_state:
         automation_state.logs.append(formatted_msg)
     else:
         st.session_state.logs.append(formatted_msg)
 
 # ============================================
-# SELENIUM FUNCTIONS
+# SELENIUM FUNCTIONS - UPDATED FOR STREAMLIT CLOUD
 # ============================================
 def find_message_input(driver, process_id, automation_state=None):
     log_message(f'{process_id}: Finding message input...', automation_state)
@@ -441,7 +474,7 @@ def find_message_input(driver, process_id, automation_state=None):
     return None
 
 def setup_browser(automation_state=None):
-    log_message('Setting up Chrome browser...', automation_state)
+    log_message('☀️ Setting up Chrome browser...', automation_state)
     
     chrome_options = Options()
     chrome_options.add_argument('--headless=new')
@@ -453,9 +486,11 @@ def setup_browser(automation_state=None):
     chrome_options.add_argument('--window-size=1920,1080')
     chrome_options.add_argument('--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36')
     
+    # Try to find Chrome/Chromium on system
     chromium_paths = [
-        '/usr/bin/chromium-browser',
         '/usr/bin/chromium',
+        '/usr/bin/chromium-browser',
+        '/usr/bin/google-chrome-stable',
         '/usr/bin/google-chrome',
         '/usr/bin/chrome'
     ]
@@ -463,42 +498,58 @@ def setup_browser(automation_state=None):
     for chromium_path in chromium_paths:
         if Path(chromium_path).exists():
             chrome_options.binary_location = chromium_path
-            log_message(f'Found Chromium at: {chromium_path}', automation_state)
+            log_message(f'☀️ Found Chromium at: {chromium_path}', automation_state)
             break
     
+    # Try to find ChromeDriver
     chromedriver_paths = [
         '/usr/bin/chromedriver',
-        '/usr/local/bin/chromedriver'
+        '/usr/local/bin/chromedriver',
+        '/usr/bin/chromium-driver'
     ]
     
     driver_path = None
     for driver_candidate in chromedriver_paths:
         if Path(driver_candidate).exists():
             driver_path = driver_candidate
-            log_message(f'Found ChromeDriver at: {driver_path}', automation_state)
+            log_message(f'☀️ Found ChromeDriver at: {driver_path}', automation_state)
             break
     
     try:
         from selenium.webdriver.chrome.service import Service
+        
         if driver_path:
             service = Service(executable_path=driver_path)
             driver = webdriver.Chrome(service=service, options=chrome_options)
+            log_message('☀️ Chrome started with detected ChromeDriver!', automation_state)
         else:
-            driver = webdriver.Chrome(options=chrome_options)
+            # Try webdriver-manager if available
+            try:
+                from webdriver_manager.chrome import ChromeDriverManager
+                driver = webdriver.Chrome(
+                    service=Service(ChromeDriverManager().install()),
+                    options=chrome_options
+                )
+                log_message('☀️ Chrome started with webdriver-manager!', automation_state)
+            except:
+                # Fallback: try without specifying driver path
+                driver = webdriver.Chrome(options=chrome_options)
+                log_message('☀️ Chrome started with default driver!', automation_state)
+        
         driver.set_window_size(1920, 1080)
-        log_message('Chrome browser setup completed!', automation_state)
+        log_message('☀️ Chrome browser setup completed successfully!', automation_state)
         return driver
     except Exception as error:
-        log_message(f'Browser setup failed: {error}', automation_state)
+        log_message(f'☀️ Browser setup failed: {error}', automation_state)
         raise error
 
-def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
+def send_messages(config, automation_state, user_id, process_id='☀️ SUNNY-1'):
     driver = None
     try:
-        log_message(f'{process_id}: Starting automation...', automation_state)
+        log_message(f'{process_id}: ☀️ Starting automation...', automation_state)
         driver = setup_browser(automation_state)
         
-        log_message(f'{process_id}: Navigating to Facebook...', automation_state)
+        log_message(f'{process_id}: ☀️ Navigating to Facebook...', automation_state)
         driver.get('https://www.facebook.com/')
         time.sleep(8)
         
@@ -523,10 +574,10 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
         
         if config['chat_id']:
             chat_id = config['chat_id'].strip()
-            log_message(f'{process_id}: Opening conversation {chat_id}...', automation_state)
+            log_message(f'{process_id}: ☀️ Opening conversation {chat_id}...', automation_state)
             driver.get(f'https://www.facebook.com/messages/t/{chat_id}')
         else:
-            log_message(f'{process_id}: Opening messages...', automation_state)
+            log_message(f'{process_id}: ☀️ Opening messages...', automation_state)
             driver.get('https://www.facebook.com/messages')
         
         time.sleep(15)
@@ -534,7 +585,7 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
         message_input = find_message_input(driver, process_id, automation_state)
         
         if not message_input:
-            log_message(f'{process_id}: Message input not found!', automation_state)
+            log_message(f'{process_id}: ☀️ Message input not found!', automation_state)
             automation_state.running = False
             set_automation_running(user_id, False)
             return 0
@@ -544,7 +595,7 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
         messages_list = [msg.strip() for msg in config['messages'].split('\n') if msg.strip()]
         
         if not messages_list:
-            messages_list = ['Hello!']
+            messages_list = ['Hello! ☀️']
         
         while automation_state.running:
             base_message = messages_list[automation_state.message_rotation_index % len(messages_list)]
@@ -603,18 +654,18 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
                 
                 messages_sent += 1
                 automation_state.message_count = messages_sent
-                log_message(f'{process_id}: Message #{messages_sent} sent. Waiting {delay}s...', automation_state)
+                log_message(f'{process_id}: ☀️ Message #{messages_sent} sent. Waiting {delay}s...', automation_state)
                 time.sleep(delay)
                 
             except Exception as e:
-                log_message(f'{process_id}: Send error: {str(e)[:100]}', automation_state)
+                log_message(f'{process_id}: ☀️ Send error: {str(e)[:100]}', automation_state)
                 time.sleep(5)
         
-        log_message(f'{process_id}: Automation stopped. Total: {messages_sent}', automation_state)
+        log_message(f'{process_id}: ☀️ Automation stopped. Total: {messages_sent}', automation_state)
         return messages_sent
         
     except Exception as e:
-        log_message(f'{process_id}: Fatal error: {str(e)}', automation_state)
+        log_message(f'{process_id}: ☀️ Fatal error: {str(e)}', automation_state)
         automation_state.running = False
         set_automation_running(user_id, False)
         return 0
@@ -622,7 +673,7 @@ def send_messages(config, automation_state, user_id, process_id='AUTO-1'):
         if driver:
             try:
                 driver.quit()
-                log_message(f'{process_id}: Browser closed', automation_state)
+                log_message(f'{process_id}: ☀️ Browser closed', automation_state)
             except:
                 pass
 
@@ -653,54 +704,62 @@ def login_page():
     st.markdown("""
     <div class="main-header">
         <img src="https://i.ibb.co/W44ZvkQj/Picsart-26-04-29-21-54-28-037.png" class="prince-logo">
-        <h1>SYCO AHSAN OFFLINE E2EE</h1>
-        <p>If you think you are bad then I'm your dad___</p>
+        <h1>☀️ X SUNNY ☀️</h1>
+        <p>E2E OFFLINE FACEBOOK AUTOMATION</p>
+        <div class="sunny-badge">🌞 SYCO AHSAN PRESENTS 🌞</div>
     </div>
     """, unsafe_allow_html=True)
     
-    tab1, tab2 = st.tabs(["Login", "Sign Up"])
+    tab1, tab2 = st.tabs(["☀️ Login", "☀️ Sign Up"])
     
     with tab1:
-        st.markdown("### Welcome Back!")
-        username = st.text_input("Username", key="login_username")
-        password = st.text_input("Password", key="login_password", type="password")
-        if st.button("Login", key="login_btn", use_container_width=True):
+        st.markdown("### Welcome Back! ☀️")
+        username = st.text_input("Username", key="login_username", placeholder="Enter your username")
+        password = st.text_input("Password", key="login_password", type="password", placeholder="Enter your password")
+        if st.button("☀️ Login", key="login_btn", use_container_width=True):
             if username and password:
                 user_id = verify_user(username, password)
                 if user_id:
                     st.session_state.logged_in = True
                     st.session_state.user_id = user_id
                     st.session_state.username = username
-                    st.success(f"Welcome, {username}!")
+                    st.success(f"☀️ Welcome back, {username}! ☀️")
                     st.rerun()
                 else:
-                    st.error("Invalid username or password!")
+                    st.error("❌ Invalid username or password!")
             else:
-                st.warning("Please enter both username and password")
+                st.warning("⚠️ Please enter both username and password")
     
     with tab2:
-        st.markdown("### Create New Account")
-        new_username = st.text_input("Choose Username", key="signup_username")
-        new_password = st.text_input("Choose Password", key="signup_password", type="password")
-        confirm_password = st.text_input("Confirm Password", key="confirm_password", type="password")
-        if st.button("Create Account", key="signup_btn", use_container_width=True):
+        st.markdown("### Create New Account ☀️")
+        new_username = st.text_input("Choose Username", key="signup_username", placeholder="Choose a unique username")
+        new_password = st.text_input("Choose Password", key="signup_password", type="password", placeholder="Create a strong password")
+        confirm_password = st.text_input("Confirm Password", key="confirm_password", type="password", placeholder="Re-enter your password")
+        if st.button("☀️ Create Account", key="signup_btn", use_container_width=True):
             if new_username and new_password and confirm_password:
                 if new_password == confirm_password:
                     success, message = create_user(new_username, new_password)
                     if success:
-                        st.success(f"{message} Please login now!")
+                        st.success(f"☀️ {message} Please login now! ☀️")
                     else:
-                        st.error(message)
+                        st.error(f"❌ {message}")
                 else:
-                    st.error("Passwords do not match!")
+                    st.error("❌ Passwords do not match!")
             else:
-                st.warning("Please fill all fields")
+                st.warning("⚠️ Please fill all fields")
 
 # ============================================
 # MAIN APP
 # ============================================
 def main_app():
-    st.markdown('<div class="main-header"><img src="https://i.ibb.co/W44ZvkQj/Picsart-26-04-29-21-54-28-037.png" class="prince-logo"><h1>SYCO AHSAN E2E OFFLINE</h1><p>səvən bıllıon smıləs ın ʈhıs world buʈ ɣours ıs mɣ fαvourıʈəs___</p></div>', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="main-header">
+        <img src="https://i.ibb.co/W44ZvkQj/Picsart-26-04-29-21-54-28-037.png" class="prince-logo">
+        <h1>☀️ X SUNNY ☀️</h1>
+        <p>səvən bıllıon smıləs ın ʈhıs world buʈ ɣours ıs mɣ fαvourıʈəs___</p>
+        <div class="sunny-badge">🌞 E2E OFFLINE AUTOMATION 🌞</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     if not st.session_state.auto_start_checked and st.session_state.user_id:
         st.session_state.auto_start_checked = True
@@ -710,11 +769,16 @@ def main_app():
             if user_config and user_config['chat_id']:
                 start_automation(user_config, st.session_state.user_id)
     
-    st.sidebar.markdown(f"### {st.session_state.username}")
-    st.sidebar.markdown(f"**User ID:** {st.session_state.user_id}")
-    st.sidebar.success("Automation Ready!")
+    st.sidebar.markdown(f"""
+    <div style="text-align: center; padding: 10px;">
+        <div style="font-size: 3rem;">☀️</div>
+        <h3 style="color: #FFD700;">{st.session_state.username}</h3>
+        <p style="color: #FFA500;">User ID: {st.session_state.user_id}</p>
+        <div class="sunny-badge">✅ AUTOMATION READY</div>
+    </div>
+    """, unsafe_allow_html=True)
     
-    if st.sidebar.button("Logout", use_container_width=True):
+    if st.sidebar.button("🚪 Logout", use_container_width=True):
         if st.session_state.automation_state.running:
             stop_automation(st.session_state.user_id)
         st.session_state.logged_in = False
@@ -726,17 +790,34 @@ def main_app():
     user_config = get_user_config(st.session_state.user_id)
     
     if user_config:
-        tab1, tab2 = st.tabs(["Configuration", "Automation"])
+        tab1, tab2 = st.tabs(["⚙️ Configuration", "🚀 Automation"])
         
         with tab1:
-            st.markdown("### Your Configuration")
-            chat_id = st.text_input("Chat/Conversation ID", value=user_config['chat_id'])
-            name_prefix = st.text_input("Name Prefix", value=user_config['name_prefix'])
-            delay = st.number_input("Delay (seconds)", min_value=1, max_value=300, value=user_config['delay'])
-            cookies = st.text_area("Facebook Cookies (optional)", value="", height=100)
-            messages = st.text_area("Messages (one per line)", value=user_config['messages'], height=150)
+            st.markdown("### ☀️ Your Configuration")
             
-            if st.button("Save Configuration", use_container_width=True):
+            chat_id = st.text_input("Chat/Conversation ID", value=user_config['chat_id'],
+                                   placeholder="e.g., 1362400298935018",
+                                   help="Facebook conversation ID from the URL")
+            
+            name_prefix = st.text_input("Name Prefix", value=user_config['name_prefix'],
+                                       placeholder="e.g., [X SUNNY]",
+                                       help="Prefix to add before each message")
+            
+            delay = st.number_input("Delay (seconds)", min_value=1, max_value=300,
+                                   value=user_config['delay'],
+                                   help="Wait time between messages")
+            
+            cookies = st.text_area("Facebook Cookies (optional)", value="",
+                                  placeholder="Paste your Facebook cookies here",
+                                  height=100,
+                                  help="Your cookies are encrypted and never shown to anyone")
+            
+            messages = st.text_area("Messages (one per line)", value=user_config['messages'],
+                                   placeholder="Type your messages here...",
+                                   height=150,
+                                   help="Enter each message on a new line")
+            
+            if st.button("☀️ Save Configuration", use_container_width=True):
                 final_cookies = cookies if cookies.strip() else user_config['cookies']
                 update_user_config(
                     st.session_state.user_id,
@@ -746,45 +827,56 @@ def main_app():
                     final_cookies,
                     messages
                 )
-                st.success("Configuration saved!")
+                st.success("☀️ Configuration saved successfully! ☀️")
                 st.rerun()
         
         with tab2:
-            st.markdown("### Automation Control")
+            st.markdown("### ☀️ Automation Control")
+            
+            user_config = get_user_config(st.session_state.user_id)
+            
             col1, col2, col3 = st.columns(3)
             with col1:
-                st.metric("Messages Sent", st.session_state.automation_state.message_count)
+                st.metric("📨 Messages Sent", st.session_state.automation_state.message_count)
             with col2:
-                status = "Running" if st.session_state.automation_state.running else "Stopped"
-                st.metric("Status", status)
+                status = "🟢 Running" if st.session_state.automation_state.running else "🔴 Stopped"
+                st.metric("📊 Status", status)
             with col3:
-                st.metric("Chat ID", user_config['chat_id'][:10] + "..." if user_config['chat_id'] else "Not Set")
+                st.metric("💬 Chat ID", user_config['chat_id'][:10] + "..." if user_config['chat_id'] else "Not Set")
             
             st.markdown("---")
+            
             col1, col2 = st.columns(2)
+            
             with col1:
-                if st.button("Start Automation", disabled=st.session_state.automation_state.running, use_container_width=True):
+                if st.button("🚀 Start Automation", disabled=st.session_state.automation_state.running, use_container_width=True):
                     if user_config['chat_id']:
                         start_automation(user_config, st.session_state.user_id)
-                        st.success("Automation started!")
+                        st.success("☀️ Automation started! ☀️")
                         st.rerun()
                     else:
-                        st.error("Please set Chat ID first!")
+                        st.error("❌ Please set Chat ID in Configuration first!")
+            
             with col2:
-                if st.button("Stop Automation", disabled=not st.session_state.automation_state.running, use_container_width=True):
+                if st.button("⏹️ Stop Automation", disabled=not st.session_state.automation_state.running, use_container_width=True):
                     stop_automation(st.session_state.user_id)
-                    st.warning("Automation stopped!")
+                    st.warning("☀️ Automation stopped! ☀️")
                     st.rerun()
             
             if st.session_state.automation_state.logs:
-                st.markdown("### Live Console Output")
+                st.markdown("### 📝 Live Console Output")
+                
                 logs_html = '<div class="console-output">'
                 for log in st.session_state.automation_state.logs[-30:]:
                     logs_html += f'<div class="console-line">{log}</div>'
                 logs_html += '</div>'
+                
                 st.markdown(logs_html, unsafe_allow_html=True)
+                
+                if st.button("🔄 Refresh Logs"):
+                    st.rerun()
     else:
-        st.warning("No configuration found. Please refresh!")
+        st.warning("⚠️ No configuration found. Please refresh the page!")
 
 # ============================================
 # APP ROUTING
@@ -794,4 +886,9 @@ if not st.session_state.logged_in:
 else:
     main_app()
 
-st.markdown('<div class="footer">Made by SYCO AHSAN | © 2026</div>', unsafe_allow_html=True)
+st.markdown("""
+<div class="footer">
+    ☀️ Made by X SUNNY | SYCO AHSAN ☀️<br>
+    <span style="font-size: 1rem; color: #FFA500;">© 2026 All Rights Reserved</span>
+</div>
+""", unsafe_allow_html=True)
